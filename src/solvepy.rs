@@ -45,9 +45,9 @@ fn make_bindings(opts: &Opts) -> String {
 
     // Create bindings and join them with newlines
     [
-        bind_line(&opts.template_bin_name, &opts.bin),
-        bind_line(&opts.template_libc_name, &opts.libc),
-        bind_line(&opts.template_ld_name, &opts.ld),
+        bind_line(&opts.config_opts.template_bin_name(), &opts.bin),
+        bind_line(&opts.config_opts.template_libc_name(), &opts.libc),
+        bind_line(&opts.config_opts.template_ld_name(), &opts.ld),
     ]
     .iter()
     .filter_map(|x| x.as_ref())
@@ -61,14 +61,18 @@ fn make_proc_args(opts: &Opts) -> String {
     let args = if opts.ld.is_some() {
         format!(
             "{}.path, {}.path",
-            opts.template_ld_name, opts.template_bin_name
+            opts.config_opts.template_ld_name(),
+            opts.config_opts.template_bin_name()
         )
     } else {
-        format!("{}.path", opts.template_bin_name)
+        format!("{}.path", opts.config_opts.template_bin_name())
     };
 
     let env = if opts.libc.is_some() {
-        format!(", env={{\"LD_PRELOAD\": {}.path}}", opts.template_libc_name)
+        format!(
+            ", env={{\"LD_PRELOAD\": {}.path}}",
+            opts.config_opts.template_libc_name()
+        )
     } else {
         "".to_string()
     };
@@ -78,7 +82,7 @@ fn make_proc_args(opts: &Opts) -> String {
 
 /// Fill in template pwntools solve script with (binary, libc, linker) paths
 fn make_stub(opts: &Opts) -> Result<String> {
-    let templ = match &opts.template_path {
+    let templ = match &opts.config_opts.template_path {
         Some(path) => {
             let data = fs::read(path).context(ReadError)?;
             String::from_utf8(data).context(Utf8Error)?
@@ -90,7 +94,7 @@ fn make_stub(opts: &Opts) -> Result<String> {
         &hashmap! {
         "bindings".to_string() => make_bindings(opts),
         "proc_args".to_string() => make_proc_args(opts),
-        "bin_name".to_string() => opts.template_bin_name.clone(),
+        "bin_name".to_string() => opts.config_opts.template_bin_name().to_string(),
         },
     )
     .context(FmtError)

@@ -1,5 +1,6 @@
 //! Utility functions that provide the bulk of ~pwninit~ functionality
 
+mod config;
 mod cpu_arch;
 mod elf;
 mod fetch_ld;

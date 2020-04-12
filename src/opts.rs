@@ -1,5 +1,6 @@
 //! Command-line option handling
 
+use crate::config::Config;
 use crate::elf;
 use crate::is_bin;
 use crate::is_ld;
@@ -51,25 +52,12 @@ pub struct Opts {
     #[setters(generate)]
     pub ld: Option<PathBuf>,
 
-    /// Path to custom pwntools solve script template. Check the README for more
-    /// information.
     #[structopt(long)]
-    pub template_path: Option<PathBuf>,
+    pub config: bool,
 
-    /// Name of binary variable for pwntools solve script
-    #[structopt(long)]
-    #[structopt(default_value = "exe")]
-    pub template_bin_name: String,
-
-    /// Name of libc variable for pwntools solve script
-    #[structopt(long)]
-    #[structopt(default_value = "libc")]
-    pub template_libc_name: String,
-
-    /// Name of linker variable for pwntools solve script
-    #[structopt(long)]
-    #[structopt(default_value = "ld")]
-    pub template_ld_name: String,
+    #[structopt(flatten)]
+    #[setters(generate)]
+    pub config_opts: Config,
 }
 
 impl Opts {
