@@ -9,6 +9,7 @@ from LibcSearcher import *
 context.binary = {bin_name}
 context.os = 'linux'
 context.arch = context.binary.arch
+context.terminal = ['gnome-terminal', '-x', 'sh', '-c']
 
 local = True
 if local:
@@ -17,11 +18,20 @@ else:
     p = remote("addr", 1337)
 
 
-def dbgaddr(addr):  # PIE enabled
-    text_base = int(
-        os.popen("pmap {{}}| awk '{{{{print $1}}}}'".format(p.pid)).readlines()[1], 16)
-    log.info(f'b *{{hex(text_base + addr)}}\n')
+def dbgaddr(addr, PIE=False):  # PIE enabled
+    if local:
+        if PIE:
+            text_base = int(
+                os.popen("pmap {{}}| awk '{{{{print $1}}}}'".format(p.pid)).readlines()[1], 16)
+            log.info(f'b *{{hex(text_base + addr)}}\n')
+            gdb.attach(p, f'b *{hex(text_base + addr)}')
+        else:
+            gdb.attach(p, f'b *{hex(addr)}')
 
+
+def dbg(func=''):
+    if local:
+        gdb.attach(p, func)
 
 # %%
 
