@@ -76,6 +76,7 @@ fn make_stub(opts: &Opts) -> Result<String> {
         }
         None => include_str!("template.py").to_string(),
     };
+    // println!("{}",&templ);
     strfmt(
         &templ,
         &hashmap! {
@@ -91,9 +92,9 @@ fn make_stub(opts: &Opts) -> Result<String> {
 /// specified directory, unless a `solve.py` already exists
 pub fn write_stub(opts: &Opts) -> Result<()> {
     let stub = make_stub(opts)?;
-    let path = Path::new("solve.py");
+    let path = Path::new("exp.py");
     if !path.exists() {
-        println!("{}", "writing solve.py stub".cyan().bold());
+        println!("{}", "writing exp.py stub".cyan().bold());
         fs::write(&path, stub).context(WriteError)?;
         set_exec(&path).context(SetExecError)?;
     }

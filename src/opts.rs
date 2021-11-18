@@ -58,7 +58,7 @@ pub struct Opts {
 
     /// Name of binary variable for pwntools solve script
     #[structopt(long)]
-    #[structopt(default_value = "exe")]
+    #[structopt(default_value = "binary")]
     pub template_bin_name: String,
 
     /// Name of libc variable for pwntools solve script
