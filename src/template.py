@@ -24,9 +24,9 @@ def dbgaddr(addr, PIE=False):  # PIE enabled
             text_base = int(
                 os.popen("pmap {{}}| awk '{{{{print $1}}}}'".format(p.pid)).readlines()[1], 16)
             log.info(f'b *{{hex(text_base + addr)}}\n')
-            gdb.attach(p, f'b *{hex(text_base + addr)}')
+            gdb.attach(p, f'b *{{hex(text_base + addr)}}')
         else:
-            gdb.attach(p, f'b *{hex(addr)}')
+            gdb.attach(p, f'b *{{hex(addr)}}')
 
 
 def dbg(func=''):
