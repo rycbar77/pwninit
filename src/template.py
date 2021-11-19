@@ -9,7 +9,7 @@ from LibcSearcher import *
 context.binary = {bin_name}
 context.os = 'linux'
 context.arch = context.binary.arch
-context.terminal = ['gnome-terminal', '-x', 'sh', '-c']
+context.terminal = ['alacritty', '-e']
 
 local = True
 if local:
@@ -32,6 +32,7 @@ def dbgaddr(addr, PIE=False):  # PIE enabled
 def dbg(func=''):
     if local:
         gdb.attach(p, func)
+
 
 # %%
 
@@ -58,4 +59,3 @@ sh_x64_21 = b"\xf7\xe6\x50\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x48\x89\x
 # %%
 
 p.interactive()
-
