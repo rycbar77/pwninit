@@ -9,10 +9,12 @@ from LibcSearcher import *
 context.binary = {bin_name}
 context.os = 'linux'
 context.arch = context.binary.arch
-context.terminal = ['alacritty', '-e']
+# context.terminal = ['alacritty', '-e']
+context.terminal = ['wt.exe', 'wsl', '--']
 
 local = True
 if local:
+    context.log_level = 'debug'
     p = process({proc_args})
 else:
     p = remote("addr", 1337)
