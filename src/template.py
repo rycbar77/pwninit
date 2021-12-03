@@ -35,8 +35,8 @@ def dbg(func=''):
     if local:
         gdb.attach(p, func)
 
-
-# %%
+# dbgaddr(0xdeadbeef,PIE=False)
+# dbg("main")
 
 s = lambda str: p.send(str)
 sl = lambda str: p.sendline(str)
